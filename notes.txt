@@ -1,0 +1,18 @@
+App router: nextJs uses the file system as the router. Every file inside the pages directory becomes a route.
+
+For example:
+- page.tsx returns a function that returns a JSX element. It is very similar to
+HTML but with the power of JavaScript.
+- layout.tsx is kind of a Wrapper around the page.tsx (Technically a child)
+
+#Components used:
+- NextUI: A React component library that provides a set of components that are ready to use.
+    (npm install @nextui-org/react framer-motion)
+        "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}", -> in tailwind.config.js -> in content
+        Also add the plugin for nextUi ->  plugins: [
+                                             nextui(),
+                                            ],
+It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)
+
+- React icons: A set of icons that can be used in the application. (npm install react-icons)
+
