@@ -1,10 +1,21 @@
+'use client';
+
 import React from 'react';
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 import {GiPadlock} from "react-icons/gi";
 import {Input} from "@nextui-org/input";
 import {Button} from "@nextui-org/react";
+import {useForm} from "react-hook-form";
 
 export default function LoginForm() {
+    const {register,
+        handleSubmit,
+        formState: {errors, isValid}} = useForm();
+    const onSubmit = (data: any) => {
+        console.log(data);
+    };
+
+
     return (
         <Card className='w-2/5 mx-auto'>
             <CardHeader className='flex flex-col item-center justify-center'>
@@ -17,18 +28,26 @@ export default function LoginForm() {
                 </div>
             </CardHeader>
             <CardBody>
-                <form action="">
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className='space-y-4'>
                         <Input
+                            defaultValue={''}
                             label='Email'
                             variant='bordered'
+                            {...register('email', {required: 'Email is required'})}
+                            isInvalid={!!errors.email}
+                            errorMessage={errors.email?.message as string}
                          />
                         <Input
+                            defaultValue={''}
                             label='Password'
                             variant='bordered'
                             type='password'
+                            {...register('password', {required: 'Password is required'})}
+                            isInvalid={!!errors.password}
+                            errorMessage={errors.password?.message as string}
                         />
-                        <Button fullWidth color={'secondary'} type={'submit'}>
+                        <Button isDisabled={!isValid} fullWidth color={'secondary'} type={'submit'}>
                             Login
                         </Button>
                     </div>
