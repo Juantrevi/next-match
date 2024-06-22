@@ -13,7 +13,7 @@ HTML but with the power of JavaScript.
                                              nextui(),
                                             ],
 - React hook form: A library that helps to create forms in React. (npm install react-hook-form) -> Also validation with zod (npm install zod)
-- NextAuth v5: A library that helps to create authentication in NextJs. (npm install next-auth)
+- NextAuth v5 (AuthJS): A library that helps to create authentication in NextJs. (npm install next-auth@beta)
 - Prisma ORM: A library that helps to interact with the database. (npm install @prisma/client)
 - NextJs Middleware: A library that helps to create middleware in NextJs. (npm install next-connect)
 
