@@ -23,8 +23,9 @@ export async function signInUser(data: LoginSchema): Promise<ActionResult<string
         console.log(error);
 
         if (error instanceof AuthError){
+
             switch (error.type){
-                case 'CredentialsSignin':
+                case 'CallbackRouteError':
                     return {status: 'error', error: 'Invalid credentials'};
                 default:
                     return {status: 'error', error: 'Something went wrong'};
