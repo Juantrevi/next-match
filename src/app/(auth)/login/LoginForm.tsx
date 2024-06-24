@@ -46,7 +46,7 @@ export default function LoginForm() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className='space-y-4'>
                         <Input
-                            defaultValue={''}
+                            defaultValue={'bob@gmail.com'}
                             label='Email'
                             variant='bordered'
                             {...register('email', )}
@@ -54,7 +54,7 @@ export default function LoginForm() {
                             errorMessage={errors.email?.message as string}
                          />
                         <Input
-                            defaultValue={''}
+                            defaultValue={'123456'}
                             label='Password'
                             variant='bordered'
                             type='password'
