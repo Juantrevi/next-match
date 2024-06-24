@@ -4,7 +4,7 @@ import React from 'react';
 import {Session} from "next-auth";
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger} from "@nextui-org/react";
 import Link from "next/link";
-import {signOut} from "@/auth";
+import {signOutUser} from "@/app/actions/authActions";
 
 type Props = {
     user: Session['user']
@@ -33,7 +33,7 @@ export default function UserMenu({user}: Props){
                 <DropdownItem as ={Link} href='/members/edit'>
                         Edit Profile
                 </DropdownItem>
-                <DropdownItem color='danger' onClick={async () => signOut}>
+                <DropdownItem color='danger' onClick={async () => signOutUser()}>
                         Log out
                 </DropdownItem>
             </DropdownMenu>
