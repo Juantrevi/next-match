@@ -13,20 +13,36 @@ import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
 
 
+// Define the LoginForm component
 export default function LoginForm() {
+    // Use the useRouter hook from Next.js to access the router object
     const router = useRouter();
-    const {register,
+
+    // Use the useForm hook from react-hook-form to manage your form state
+    // The form is validated using the zodResolver with your loginSchema
+    // The form validation mode is set to 'onTouched', which means validation is triggered when the input loses focus
+    const {
+        register,
         handleSubmit,
-        formState: {errors, isValid, isSubmitting}} = useForm<LoginSchema>({
+        formState: {errors, isValid, isSubmitting}
+    } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         mode: 'onTouched'
     });
+
+    // Define the onSubmit function that will be called when the form is submitted
+    // This function takes the form data as a parameter
     const onSubmit = async (data: LoginSchema) => {
+        // Call the signInUser function with the form data
+        // This function is asynchronous, so we wait for it to complete using await
         const result = await signInUser(data);
+
+        // If the sign in was successful, redirect the user to the '/members' page and refresh the page
         if(result.status === 'success'){
             router.push('/members');
             router.refresh();
-        }else {
+        } else {
+            // If the sign in was not successful, show a toast notification with the error message
             toast.error(result.error as string);
         }
     };
