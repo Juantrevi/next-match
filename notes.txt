@@ -26,6 +26,6 @@ HTML but with the power of JavaScript.
 It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)
 
 - React icons: A set of icons that can be used in the application. (npm install react-icons)
-
+- Middleware: A function that runs before the request is processed by the route handler. Used to see if the user is authenticated or not.
 -page.tsx and layout.tsx functionalities work together to create a page. The layout.tsx is a wrapper around the page.tsx.
 
