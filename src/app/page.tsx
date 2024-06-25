@@ -13,9 +13,9 @@ export default async function Home() {
                   <pre>{ JSON.stringify(session, null, 2) }</pre>
               </div>
           ) : (
-                <div>
-                    <p>Not signed in</p>
-                </div>
+              <div>
+                  <p>Not signed in</p>
+              </div>
           )}
 
       </div>
