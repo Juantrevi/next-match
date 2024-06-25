@@ -21,6 +21,7 @@ HTML but with the power of JavaScript.
 - NextJs Middleware: A library that helps to create middleware in NextJs. (npm install next-connect)
 - Bcrypt: A library that helps to hash passwords. (npm install bcrypt) & types (npm install -D @types/bcryptjs)
 - React-Toastify: A library that helps to create toasts in React. (npm install react-toastify)
+- ts-node: A library that helps to run TypeScript files, for example to populate db. (npm install -D ts-node) -> npx prisma db seed -> To execute
 
 
 It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)

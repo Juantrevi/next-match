@@ -35,6 +35,10 @@
     "postcss": "^8",
     "prisma": "^5.15.1",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"commonJS\"} prisma/seed.ts"
   }
 }
