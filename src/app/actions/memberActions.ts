@@ -21,6 +21,7 @@ export async function getMembers() {
     });
   }catch(error) {
     console.error(error)
+    throw error;
   }
 }
 
