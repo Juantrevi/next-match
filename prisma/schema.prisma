@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// The Account model has a one-to-one relationship with the User model.
+// The `user` field in the Account model is the relation scalar field,
+// and the `accounts` field in the User model is the relation scalar field.
+// The `onDelete: Cascade` option means that when an Account record is deleted,
+// the associated User record will also be deleted.
 model Account {
   id                String   @id @default(cuid())
   userId            String
@@ -28,6 +33,11 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+// The User model has a one-to-one relationship with the Member model.
+// The `member` field in the User model is the relation scalar field,
+// and the `user` field in the Member model is the relation scalar field.
+// The `onDelete: Cascade` option means that when a User record is deleted,
+// the associated Member record will also be deleted.
 model User {
   id            String   @id @default(cuid())
   name          String?
@@ -41,6 +51,11 @@ model User {
   updatedAt     DateTime @updatedAt
 }
 
+// The Member model has a one-to-many relationship with the Photo model.
+// The `photos` field in the Member model is the relation scalar field,
+// and the `member` field in the Photo model is the relation scalar field.
+// The `onDelete: Cascade` option means that when a Member record is deleted,
+// all associated Photo records will also be deleted.
 model Member {
   id          String   @id @default(cuid())
   userId      String   @unique
@@ -56,8 +71,16 @@ model Member {
 
   photos      Photo[]
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sourceLikes Like[] @relation("source")
+  targetLikes Like[] @relation("target")
 }
 
+// The Photo model has a many-to-one relationship with the Member model.
+// The `member` field in the Photo model is the relation scalar field,
+// and the `photos` field in the Member model is the relation scalar field.
+// The `onDelete: Cascade` option means that when a Photo record is deleted,
+// the associated Member record will not be affected.
 model Photo {
   id       String @id @default(cuid())
   url      String
@@ -65,4 +88,19 @@ model Photo {
   memberId String
 
   member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+// The Like model has a many-to-many relationship with the Member model.
+// The `sourceLikes` and `targetLikes` fields in the Member model are the relation scalar fields,
+// and the `sourceMember` and `targetMember` fields in the Like model are the relation scalar fields.
+// The `onDelete: Cascade` option means that when a Member record is deleted,
+// all associated Like records (both as a source and a target) will also be deleted.
+model Like {
+  sourceUserId String
+  sourceMember Member @relation("source", fields: [sourceUserId], references: [userId], onDelete: Cascade)
+
+  targetUserId String
+  targetMember Member @relation("target", fields: [targetUserId], references: [userId], onDelete: Cascade)
+
+  @@id([sourceUserId, targetUserId])
 }
