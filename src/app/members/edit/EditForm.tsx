@@ -7,6 +7,10 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {MemberEditSchema, memberEditSchema} from "@/lib/schemas/memberEditSchema";
 import {Input, Textarea} from "@nextui-org/input";
 import {Button} from "@nextui-org/react";
+import {updateMemberProfile} from "@/app/actions/userAction";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+import {handleFormServerErrors} from "@/lib/util";
 
 
 type Props = {
@@ -14,10 +18,13 @@ type Props = {
 }
 export default function EditForm({member} : Props) {
 
+    const router = useRouter();
+
     const {
         register,
         handleSubmit,
         reset,
+        setError,
         formState: {isValid, isDirty, isSubmitting, errors}} = useForm<MemberEditSchema>({
         resolver: zodResolver(memberEditSchema),
         mode: 'onTouched',
@@ -35,7 +42,16 @@ export default function EditForm({member} : Props) {
     }, [member, reset])
 
     const onSubmit = async (data: MemberEditSchema) => {
-        console.log(data)
+        const result = await updateMemberProfile(data);
+
+        if (result.status === 'success') {
+            toast.success('Profile updated successfully');
+            router.refresh();
+            reset({...data})
+        }else {
+            handleFormServerErrors(result, setError);
+        }
+
     }
 
     return (
@@ -75,6 +91,10 @@ export default function EditForm({member} : Props) {
                     errorMessage={errors.country?.message}
                 />
             </div>
+
+            {errors.root?.serverError && (
+                <p className='text-danger text-sm'>{errors.root.serverError.message}</p>
+            )}
 
             <Button
                 type={'submit'}
