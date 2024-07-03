@@ -35,3 +35,27 @@ export async function updateMemberProfile(data: MemberEditSchema): Promise<Actio
         return {status: 'error', error: 'An error occurred while updating your profile'};
     }
 }
+
+export async function addImage(url: string, publicId: string){
+    try{
+        const userId = await getAuthUserId();
+
+        return prisma.member.update({
+            where: {
+                userId,
+            },
+            data: {
+                photos: {
+                    create: [{
+                        url,
+                        publicId,
+                    }]
+                }
+            }
+        });
+
+    }catch (error){
+        console.log(error);
+        throw error;
+    }
+}
