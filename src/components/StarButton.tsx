@@ -12,8 +12,8 @@ export default function StarButton({selected, loading}: Props) {
         <div className={'relative hover:opacity-80 transition cursor-pointer'}>
             {!loading? (
                 <>
-                    <AiOutlineStar size={32} className={'fill-white absolute -top-[2px] -right-[10px]'}/>
-                    <AiFillStar size={20} className={selected ? 'fill-yellow-200' : 'fill-neutral-500/70'}/>
+                    <AiOutlineStar size={32} className={'fill-white absolute -top-[2px] -right-[2px]'}/>
+                    <AiFillStar size={28} className={selected ? 'fill-yellow-200' : 'fill-neutral-500/70'}/>
                 </>
             ) : (
                 <PiSpinnerGap size={32} className={'fill-white animate-spin'}/>
