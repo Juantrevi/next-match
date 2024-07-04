@@ -7,7 +7,7 @@ import Link from "next/link";
 import {signOutUser} from "@/app/actions/authActions";
 
 type Props = {
-    user: Session['user']
+    user: {name: string | null; image: string | null;} | null;
 }
 export default function UserMenu({user}: Props){
     return (
