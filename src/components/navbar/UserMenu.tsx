@@ -4,6 +4,7 @@ import React from 'react';
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger} from "@nextui-org/react";
 import Link from "next/link";
 import {signOutUser} from "@/app/actions/authActions";
+import {transformImageUrl} from "@/lib/util";
 
 type Props = {
     user: {name: string | null; image: string | null;} | null;
@@ -19,7 +20,7 @@ export default function UserMenu({user}: Props){
                 color='secondary'
                 name={user?.name || 'user avatar'}
                 size='sm'
-                src={user?.image || '/images/user.png'}
+                src={transformImageUrl(user?.image) || '/images/user.png'}
                 />
             </DropdownTrigger>
 

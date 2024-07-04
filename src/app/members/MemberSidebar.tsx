@@ -4,7 +4,7 @@ import React from 'react';
 import {Member} from ".prisma/client";
 import {Card, CardBody} from "@nextui-org/card";
 import {Button, CardFooter, Divider, Image} from "@nextui-org/react";
-import {calculateAge} from "@/lib/util";
+import {calculateAge, transformImageUrl} from "@/lib/util";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 
@@ -22,7 +22,7 @@ export default function MemberSidebar( {member, navLinks}: Props) {
             <Image
             height={200}
             width={200}
-            src={member.image || '/images/user.png'}
+            src={transformImageUrl(member.image) || '/images/user.png'}
             alt="Profile Image"
             className={'rounded-full mt-6 aspect-square object-cover'}
             />
