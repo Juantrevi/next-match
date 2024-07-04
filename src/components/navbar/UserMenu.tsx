@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import {Session} from "next-auth";
 import {Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger} from "@nextui-org/react";
 import Link from "next/link";
 import {signOutUser} from "@/app/actions/authActions";

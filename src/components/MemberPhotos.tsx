@@ -7,7 +7,7 @@ import StarButton from "@/components/StarButton";
 import DeleteButton from "@/components/DeleteButton";
 import {Photo} from ".prisma/client";
 import {useRouter} from "next/navigation";
-import {setMainImage} from "@/app/actions/userAction";
+import {deleteImage, setMainImage} from "@/app/actions/userAction";
 
 type Props = {
     photos: Photo[] | null;
@@ -32,6 +32,14 @@ export default function MemberPhotos({photos, editing, mainImageUrl}: Props) {
         setLoading({isLoading: false, type: '', id: ''});
     }
 
+    const onDelete = async (photo: Photo) => {
+        if (photo.url === mainImageUrl) return null;
+        setLoading({isLoading: true, type: 'delete', id: photo.id});
+        await deleteImage(photo);
+        router.refresh();
+        setLoading({isLoading: false, type: '', id: ''});
+    }
+
     return (
         <div className={'grid grid-cols-5 gap-3 p-5'}>
             {photos && photos.map(photo => (
@@ -51,8 +59,12 @@ export default function MemberPhotos({photos, editing, mainImageUrl}: Props) {
                                 </div>
                             </Tooltip>
                             <Tooltip content={'Delete image'}>
-                                <div className={'absolute top-3 right-3 z-50'}>
-                                    <DeleteButton loading={false} />
+                                <div className={'absolute top-3 right-3 z-50'} onClick={() => onDelete(photo)}>
+                                    <DeleteButton loading={
+                                        loading.isLoading &&
+                                        loading.type === 'delete' &&
+                                        loading.id === photo.id
+                                    } />
                                 </div>
                             </Tooltip>
                         </>
