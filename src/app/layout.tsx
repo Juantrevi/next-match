@@ -21,7 +21,6 @@ export default function RootLayout({
         <main className='container mx-auto ms-10'>
           {children}
         </main>
-
       </Providers>
       </body>
     </html>
