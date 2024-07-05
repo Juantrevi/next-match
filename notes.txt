@@ -24,6 +24,7 @@ HTML but with the power of JavaScript.
 - ts-node: A library that helps to run TypeScript files, for example to populate db. (npm install -D ts-node) -> npx prisma db seed -> To execute
 - Datefnf: A library that helps to format dates. (npm install date-fns)
 - Cloudinary: A library that helps to upload images to the cloud. (npm install cloudinary)
+- Clsx: A library that helps to conditionally add classes to an element. (npm install clsx)
 
 
 It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)

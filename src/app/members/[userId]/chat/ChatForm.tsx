@@ -44,6 +44,7 @@ export default function ChatForm() {
                     {...register('text')}
                     isInvalid={!!errors.text}
                     errorMessage={errors.text?.message}
+                    autoComplete={'off'}
                 />
                 <Button
                     type={'submit'}
