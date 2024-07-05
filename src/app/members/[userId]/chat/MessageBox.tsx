@@ -1,4 +1,6 @@
-import React from 'react';
+'use client'
+
+import React, {useEffect, useRef} from 'react';
 import {MessageDto} from "@/types";
 import clsx from "clsx";
 import {transformImageUrl} from "@/lib/util";
@@ -12,6 +14,12 @@ type Props = {
 
 export default function MessageBox({message, currentUserId}: Props) {
     const isCurrentUserSender = message.senderId === currentUserId;
+    const messageEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (messageEndRef.current) messageEndRef.current.scrollIntoView({behavior: 'smooth'})
+    }, [messageEndRef]);
+    
 
     const renderAvatar = () => (
         <Avatar
@@ -71,6 +79,7 @@ export default function MessageBox({message, currentUserId}: Props) {
                 {isCurrentUserSender && renderAvatar()}
 
             </div>
+            <div ref={messageEndRef}/>
         </div>
     );
 };
