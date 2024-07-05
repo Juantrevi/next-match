@@ -75,8 +75,8 @@ model Member {
   sourceLikes Like[] @relation("source")
   targetLikes Like[] @relation("target")
 
-  senderMessages message[] @relation("sender")
-  recipientMessages message[] @relation("recipient")
+  senderMessages Message[] @relation("sender")
+  recipientMessages Message[] @relation("recipient")
 }
 
 // The Photo model has a many-to-one relationship with the Member model.
@@ -108,7 +108,7 @@ model Like {
   @@id([sourceUserId, targetUserId])
 }
 
-model message{
+model Message{
   id String @id @default(cuid())
   text String
   created DateTime @default(now())
