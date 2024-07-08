@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react';
-import {useSearchParams} from "next/navigation";
+import React, {Key} from 'react';
+import {useRouter, useSearchParams} from "next/navigation";
 import {getKeyValue, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow} from "@nextui-org/react";
 import {MessageDto} from "@/types";
+import {Card} from "@nextui-org/card";
 
 type Props = {
     messages: MessageDto[]
@@ -11,6 +12,7 @@ type Props = {
 
 export default function MessageTable({messages}: Props) {
     const searchParams = useSearchParams()
+    const router = useRouter();
     const isOutbox = searchParams.get('container') === 'outbox';
 
     const columns = [
@@ -20,30 +22,39 @@ export default function MessageTable({messages}: Props) {
 
     ]
 
-    return (
-        <Table
-            aria-label={'Table with messages'}
-            selectionMode={'single'}
-            onRowAction={(key) => {}}
-        >
-            <TableHeader columns={columns}>
-                {(column) =>
-                    <TableColumn key={column.key}>
-                        {column.label}
-                    </TableColumn> }
-            </TableHeader>
-            <TableBody items={messages} emptyContent={'No messages for this container'}>
-                {(item) => (
-                    <TableRow key={item.id} className={'cursor-pointer'}>
-                        {(columnKey) => (
-                            <TableCell>
-                                {getKeyValue(item, columnKey)}
-                            </TableCell>
-                        )}
-                    </TableRow>
-                )}
-            </TableBody>
+    const handleRowSelect = (key: Key) => {
+        const message = messages.find(m => m.id === key);
+        const url = isOutbox ? `/members/${message?.recipientId}` : `/members/${message?.senderId}`;
+        router.push(url + '/chat');
+    }
 
-        </Table>
+    return (
+        <Card className={'flex flex-col gap-3 h-[80vh] overflow-auto'}>
+            <Table
+                aria-label={'Table with messages'}
+                selectionMode={'single'}
+                onRowAction={(key) => handleRowSelect(key)}
+                shadow={'none'}
+            >
+                <TableHeader columns={columns}>
+                    {(column) =>
+                        <TableColumn key={column.key}>
+                            {column.label}
+                        </TableColumn> }
+                </TableHeader>
+                <TableBody items={messages} emptyContent={'No messages for this container'}>
+                    {(item) => (
+                        <TableRow key={item.id} className={'cursor-pointer'}>
+                            {(columnKey) => (
+                                <TableCell>
+                                    {getKeyValue(item, columnKey)}
+                                </TableCell>
+                            )}
+                        </TableRow>
+                    )}
+                </TableBody>
+
+            </Table>
+        </Card>
     );
 };
