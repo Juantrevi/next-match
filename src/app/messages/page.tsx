@@ -1,6 +1,7 @@
 import React from 'react';
 import MessageSidebar from "@/app/messages/MessageSidebar";
 import {getMessagesByContainer, getMessageThread} from "@/app/actions/messageActions";
+import MessageTable from "@/app/messages/MessageTable";
 
 export default async function MessagesPage({searchParams}:{searchParams: {container: string}}) {
 
@@ -12,7 +13,7 @@ export default async function MessagesPage({searchParams}:{searchParams: {contai
                 <MessageSidebar />
             </div>
             <div className={'col-span-10'}>
-                Message table goes here
+                <MessageTable messages={messages} />
             </div>
         </div>
     );
