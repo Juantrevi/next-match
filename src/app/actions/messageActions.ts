@@ -162,7 +162,7 @@ export async function deleteMessage(messageId: string, isOutbox: boolean){
             }
         })
 
-        const mesagesToDelete = await prisma.message.findMany({
+        const messagesToDelete = await prisma.message.findMany({
             where: {
                 OR: [
                     {
@@ -179,10 +179,10 @@ export async function deleteMessage(messageId: string, isOutbox: boolean){
             }
         })
 
-        if (mesagesToDelete.length > 0){
+        if (messagesToDelete.length > 0){
             await prisma.message.deleteMany({
                 where: {
-                    OR: mesagesToDelete.map(m => ({id: m.id}))
+                    OR: messagesToDelete.map(m => ({id: m.id}))
                 }
             })
         }

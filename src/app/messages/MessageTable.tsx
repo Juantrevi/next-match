@@ -1,6 +1,6 @@
 'use client'
 
-import React, {Key, useCallback} from 'react';
+import React, {Key, useCallback, useState} from 'react';
 import {useRouter, useSearchParams} from "next/navigation";
 import {
     Avatar,
@@ -16,6 +16,8 @@ import {
 import {MessageDto} from "@/types";
 import {Card} from "@nextui-org/card";
 import {AiFillDelete} from "react-icons/ai";
+import {deleteMessage} from "@/app/actions/messageActions";
+import {truncateString} from "@/lib/util";
 
 type Props = {
     messages: MessageDto[]
@@ -25,6 +27,7 @@ export default function MessageTable({messages}: Props) {
     const searchParams = useSearchParams()
     const router = useRouter();
     const isOutbox = searchParams.get('container') === 'outbox';
+    const [isDeleting, setDeleting] = useState({id: '', loading: false});
 
     const columns = [
         {key: isOutbox ? 'recipientName' : 'senderName', label: isOutbox ? 'Recipient': 'Sender'},
@@ -34,6 +37,14 @@ export default function MessageTable({messages}: Props) {
 
 
     ]
+
+    const handleDeleteMessage = useCallback(async (message: MessageDto) => {
+        setDeleting({id: message.id, loading: true});
+        await deleteMessage(message.id, isOutbox);
+        router.refresh();
+        setDeleting({id: '', loading: false});
+    }, [isOutbox, router]);
+
 
     const handleRowSelect = (key: Key) => {
         const message = messages.find(m => m.id === key);
@@ -58,8 +69,8 @@ export default function MessageTable({messages}: Props) {
                 )
             case 'text':
                 return (
-                    <div className={'truncate'}>
-                        {cellValue}
+                    <div>
+                        {truncateString(cellValue)}
                     </div>
                 )
             case 'created':
@@ -70,12 +81,14 @@ export default function MessageTable({messages}: Props) {
                     <Button
                         isIconOnly
                         variant='light'
+                        onClick={() => handleDeleteMessage(item)}
+                        isLoading={isDeleting.id === item.id && isDeleting.loading}
                     >
                         <AiFillDelete size={24} className={'text-danger'} />
                     </Button>
                 );
         }
-    }, [isOutbox])
+    }, [isOutbox, isDeleting.id, isDeleting.loading, handleDeleteMessage])
 
     return (
         <Card className={'flex flex-col gap-3 h-[80vh] overflow-auto'}>
@@ -87,7 +100,7 @@ export default function MessageTable({messages}: Props) {
             >
                 <TableHeader columns={columns}>
                     {(column) =>
-                        <TableColumn key={column.key}>
+                        <TableColumn key={column.key} width={column.key === 'text' ? '50%' : undefined}>
                             {column.label}
                         </TableColumn> }
                 </TableHeader>
