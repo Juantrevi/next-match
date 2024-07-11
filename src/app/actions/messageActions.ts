@@ -67,16 +67,19 @@ export async function getMessageThread(recipientId: string){
         });
 
         if(messages.length > 0) {
+            const readMessageIds = messages
+                .filter(m => m.dateRead === null
+                    && m.sender?.userId === recipientId
+                    && m.recipient?.userId === userId)
+                .map(m => m.id)
+
             await prisma.message.updateMany({
-                where: {
-                    senderId: recipientId,
-                    recipientId: userId,
-                    dateRead: null
-                },
+                where: {id: {in:readMessageIds}},
                 data: {
                     dateRead: new Date()
                 }
             })
+            await pusherServer.trigger(createChatId(recipientId, userId), 'messages:read', readMessageIds);
         }
 
         return messages.map(message => mapMessageToMessageDto(message))

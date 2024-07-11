@@ -3,7 +3,7 @@
 import React, {useEffect, useRef} from 'react';
 import {MessageDto} from "@/types";
 import clsx from "clsx";
-import {transformImageUrl} from "@/lib/util";
+import {timeAgo, transformImageUrl} from "@/lib/util";
 import {Avatar} from "@nextui-org/react";
 
 type Props = {
@@ -43,7 +43,7 @@ export default function MessageBox({message, currentUserId}: Props) {
         })}>
             {message.dateRead && message.recipientId !== currentUserId ? (
                 <span className={'text-xs text-black text-italic'}>
-                    (Read 4 mins ago)
+                    (Read {timeAgo(message.dateRead)})
                 </span>
             ) : <div>
 
