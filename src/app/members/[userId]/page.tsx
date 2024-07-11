@@ -12,6 +12,8 @@ export default async function MemberDetailedPage({params}: {params: {userId: str
     }
 
     return (
-       <CardInnerWrapper header={'Profile'} body={<div>{member.description}</div>} />
+       <CardInnerWrapper
+           header={'Profile'}
+           body={<div>{member.description}</div>} />
     );
 };
