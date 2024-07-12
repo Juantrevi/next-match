@@ -41,7 +41,7 @@ export const usePresenceChannel = () => {
         }
 
         return () => {
-            if(channelRef.current){
+            if(channelRef.current && channelRef.current.subscribed){
                 channelRef.current.unsubscribe();
                 channelRef.current.unbind('pusher:subscription_succeeded', handleSetMembers);
                 channelRef.current.unbind('pusher:member_added', handleAddMember);

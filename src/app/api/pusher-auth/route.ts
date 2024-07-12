@@ -6,7 +6,7 @@ export async function POST(request: Request){
     try {
         const session = await auth();
 
-        if(!session?.user?.id){
+        if (!session?.user?.id) {
             return new Response('Unauthorized', {status: 401});
         }
 
@@ -24,7 +24,8 @@ export async function POST(request: Request){
 
         return NextResponse.json(authResponse)
 
-    }catch (error){
-
+    }catch (error) {
+        console.error('Error in Pusher auth:', error);
+        return new Response('Internal Server Error', { status: 500 });
     }
 }
