@@ -27,6 +27,7 @@ HTML but with the power of JavaScript.
 - Clsx: A library that helps to conditionally add classes to an element. (npm install clsx)
 - Websocket by pusher: A library that helps to create real-time applications. (www.pusher.com).
   We need two packages, for the server side and client side (npm install pusher pusher-js) [For presence channel too]
+- Zustand: A library that helps to create global state in React. (npm install zustand)
 
 
 It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)
