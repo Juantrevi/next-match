@@ -18,6 +18,7 @@ import {Card} from "@nextui-org/card";
 import {AiFillDelete} from "react-icons/ai";
 import {deleteMessage} from "@/app/actions/messageActions";
 import {truncateString} from "@/lib/util";
+import PresenceAvatar from "@/components/PresenceAvatar";
 
 type Props = {
     messages: MessageDto[]
@@ -60,9 +61,9 @@ export default function MessageTable({messages}: Props) {
             case 'senderName':
                 return(
                     <div className='flex items-center gap-2 cursor-pointer' >
-                        <Avatar
-                            alt={'Image of memeber'}
-                            src={(isOutbox ? item.recipientImage : item.senderImage) || '/image/user.png'}
+                        <PresenceAvatar
+                            userId={isOutbox ? item.recipientId : item.senderId}
+                            src={isOutbox ? item.recipientImage : item.senderImage}
                         />
                         <span>{cellValue}</span>
                     </div>

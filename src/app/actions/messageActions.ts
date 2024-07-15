@@ -97,7 +97,7 @@ export async function getMessagesByContainer(container: string){
         const userId = await getAuthUserId();
 
         const conditions = {
-            [container === 'outbox' ? 'senderDeleted' : 'recipientDeleted']: userId,
+            [container === 'outbox' ? 'senderId' : 'recipientId']: userId,
             ...(container === 'outbox' ? {senderDeleted: false} : {recipientDeleted: false})
         }
 
@@ -118,6 +118,7 @@ export async function getMessagesByContainer(container: string){
     }
 
 }
+
 
 export async function deleteMessage(messageId: string, isOutbox: boolean){
     const selector = isOutbox ? 'senderDeleted' : 'recipientDeleted';
