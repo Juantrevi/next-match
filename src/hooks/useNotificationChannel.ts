@@ -5,6 +5,7 @@ import {MessageDto} from "@/types";
 import {usePathname, useSearchParams} from "next/navigation";
 import useMessageStore from "@/hooks/useMessageStore";
 import {toast} from "react-toastify";
+import NewMessageToast, {newMessageToast} from "@/components/NewMessageToast";
 
 export const useNotificationChannel = (userId: string | null) => {
     const channelRef = useRef<Channel | null>(null);
@@ -18,7 +19,7 @@ export const useNotificationChannel = (userId: string | null) => {
         if(pathName ==='/messages' && searchParams.get('container') !== 'outbox'){
             add(message);
         }else if(pathName !== `/members/${message.senderId}/chat`){
-            toast.info(`New message from ${message.senderName}`);
+            newMessageToast(message);
         }
     }, [add, pathName, searchParams]);
 
