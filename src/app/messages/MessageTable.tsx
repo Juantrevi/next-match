@@ -15,12 +15,12 @@ import MessageTableCell from "@/app/messages/MessageTableCell";
 import {useMessages} from "@/hooks/useMessages";
 
 type Props = {
-    messages: MessageDto[]
+    initialMessages: MessageDto[]
 }
 
-export default function MessageTable({messages}: Props) {
+export default function MessageTable({initialMessages}: Props) {
 
-    const {columns, isOutbox, isDeleting, deleteMessage, selectRow} = useMessages(messages);
+    const {columns, isOutbox, isDeleting, deleteMessage, selectRow, messages} = useMessages(initialMessages);
 
 
     return (
