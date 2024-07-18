@@ -5,10 +5,11 @@ import {deleteMessage} from "@/app/actions/messageActions";
 import useMessageStore from "@/hooks/useMessageStore";
 
 export const useMessages = (initialMessages: MessageDto[]) => {
-    const {set, remove, messages} = useMessageStore(state => ({
+    const {set, remove, messages, updateUnreadCount} = useMessageStore(state => ({
         set: state.set,
         remove: state.remove,
-        messages: state.message
+        messages: state.message,
+        updateUnreadCount: state.updateUnreadCount
     }));
     const searchParams = useSearchParams()
     const router = useRouter();
@@ -35,9 +36,10 @@ export const useMessages = (initialMessages: MessageDto[]) => {
     const handleDeleteMessage = useCallback(async (message: MessageDto) => {
         setDeleting({id: message.id, loading: true});
         await deleteMessage(message.id, isOutbox);
-        router.refresh();
+        remove(message.id);
+        if (!message.dateRead && !isOutbox) updateUnreadCount(-1)
         setDeleting({id: '', loading: false});
-    }, [isOutbox, router]);
+    }, [isOutbox, remove, updateUnreadCount]);
 
 
     const handleRowSelect = (key: Key) => {
