@@ -7,6 +7,12 @@ import {getAuthUserId} from "@/app/actions/authActions";
 import {prisma} from "@/lib/prisma";
 import {cloudinary} from "@/lib/cloudinary";
 
+//Sorting: orderBy: {createdAt: 'desc'}
+//Filtering: where: {name: {contains: 'John'}}
+//Pagination: take: 10, skip: 10 (Two types, offset based and cursor based)
+// Offset based: take: 10, skip: 10 -> Not scale on a db level
+// Cursor based: take: 10, cursor: {id: 10} -> Scale on a db level
+
 export async function updateMemberProfile(data: MemberEditSchema, nameUpdated: boolean): Promise<ActionResult<Member>>{
     try {
         const userId = await getAuthUserId();
