@@ -69,7 +69,7 @@ export default function Filters() {
                     <Select
                         size={'sm'}
                         fullWidth
-                        placeholder={'Order by'}
+                        label={'Order by'}
                         variant={'bordered'}
                         color={'secondary'}
                         aria-label={'Order by selector'}
@@ -78,7 +78,7 @@ export default function Filters() {
                     >
                         {orderByList.map(item => (
                             <SelectItem key={item.value} value={item.value}>
-                                {item.value}
+                                {item.label}
                             </SelectItem>
                         ))}
 

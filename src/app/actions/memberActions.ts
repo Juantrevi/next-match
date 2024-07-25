@@ -18,6 +18,8 @@ export async function getMembers(searchParams: UserFilters) {
   const minDob = addYears(currentDate, -ageRange[1] - 1);
   const maxDob = addYears(currentDate, -ageRange[0]);
 
+  const orderBySelector = searchParams?.orderBy || 'updated'
+
   try {
     return prisma.member.findMany({
       where: {
@@ -28,7 +30,8 @@ export async function getMembers(searchParams: UserFilters) {
         NOT: {
           userId: session.user.id
         }
-      }
+      },
+      orderBy: {[orderBySelector]: 'desc'},
     });
   }catch(error) {
     console.error(error)
