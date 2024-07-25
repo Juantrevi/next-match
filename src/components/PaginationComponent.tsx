@@ -7,6 +7,8 @@ import clsx from "clsx";
 export default function PaginationComponent() {
     const [active, setActive] = useState(3);
 
+
+
     return (
         <div className={'bordered-t-2 w-full mt-5'}>
             <div className={'flex flex-row justify-between items-center py-5'}>

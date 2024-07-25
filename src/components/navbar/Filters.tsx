@@ -1,13 +1,16 @@
 'use client'
 
-import React from 'react';
+import React, {useState} from 'react';
 import {FaFemale, FaMale} from "react-icons/fa";
-import {usePathname} from "next/navigation";
-import {Button, Select, SelectItem, Slider} from "@nextui-org/react";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {Button, Select, Selection, SelectItem, Slider} from "@nextui-org/react";
 
 export default function Filters() {
 
-    const pathName = usePathname();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const [clientLoaded, setClientLoaded] = useState(false)
 
     const orderByList = [
         {label: 'Last active', value: 'updated'},
@@ -19,7 +22,21 @@ export default function Filters() {
         {value: 'female', icon: FaFemale},
     ]
 
-    if (pathName !== '/members') return null;
+    const handleAgeSelect = (value: number[]) => {
+        const params = new URLSearchParams(searchParams);
+        params.set('ageRange', value.join(','));
+        router.replace(`${pathname}?${params}`);
+    }
+
+    const handleOrderSelect = (value: Selection) => {
+        if(value instanceof Set) {
+            const params = new URLSearchParams(searchParams);
+            params.set('orderBy', value.values().next().value);
+            router.replace(`${pathname}?${params}`);
+        }
+    }
+
+    if (pathname !== '/members') return null;
 
     return (
         <div className={'shadow-md py-2'}>
@@ -45,6 +62,7 @@ export default function Filters() {
                         minValue={18}
                         maxValue={99}
                         defaultValue={[18, 99]}
+                        onChangeEnd={(value) => handleAgeSelect(value as number[])}
                     />
                 </div>
                 <div className={'w-1/4'}>
@@ -55,6 +73,8 @@ export default function Filters() {
                         variant={'bordered'}
                         color={'secondary'}
                         aria-label={'Order by selector'}
+                        selectedKeys={new Set([searchParams.get('orderBy') || 'updated'])}
+                        onSelectionChange={handleOrderSelect}
                     >
                         {orderByList.map(item => (
                             <SelectItem key={item.value} value={item.value}>
