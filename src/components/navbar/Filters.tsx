@@ -11,6 +11,7 @@ export default function Filters() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [clientLoaded, setClientLoaded] = useState(false)
+    const selectedGender = searchParams.get('gender')?.split(',') || ['male', 'female'];
 
     const orderByList = [
         {label: 'Last active', value: 'updated'},
@@ -36,6 +37,17 @@ export default function Filters() {
         }
     }
 
+    const handleGenderSelect = (value: string) => {
+        const params = new URLSearchParams(searchParams);
+        if(selectedGender.includes(value)) {
+            params.set('gender', selectedGender.filter(g => g !== value).toString())
+        }else{
+            params.set('gender', [...selectedGender, value].toString())
+        }
+        router.replace(`${pathname}?${params}`);
+
+    }
+
     if (pathname !== '/members') return null;
 
     return (
@@ -49,7 +61,13 @@ export default function Filters() {
                         Gender:
                     </div>
                     {genders.map(({icon: Icon, value}) => (
-                        <Button key={value} size={'sm'} isIconOnly color={'secondary'}>
+                        <Button
+                            key={value}
+                            size={'sm'}
+                            isIconOnly
+                            color={selectedGender.includes(value) ? 'secondary' : 'default'}
+                            onClick={() => handleGenderSelect(value)}
+                        >
                             <Icon size={24} />
                         </Button>
                     ))}
