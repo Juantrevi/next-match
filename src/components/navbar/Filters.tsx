@@ -7,46 +7,7 @@ import {Button, Select, Selection, SelectItem, Slider} from "@nextui-org/react";
 
 export default function Filters() {
 
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const [clientLoaded, setClientLoaded] = useState(false)
-    const selectedGender = searchParams.get('gender')?.split(',') || ['male', 'female'];
 
-    const orderByList = [
-        {label: 'Last active', value: 'updated'},
-        {label: 'Newest members', value: 'created'},
-    ]
-
-    const genders = [
-        {value: 'male', icon: FaMale},
-        {value: 'female', icon: FaFemale},
-    ]
-
-    const handleAgeSelect = (value: number[]) => {
-        const params = new URLSearchParams(searchParams);
-        params.set('ageRange', value.join(','));
-        router.replace(`${pathname}?${params}`);
-    }
-
-    const handleOrderSelect = (value: Selection) => {
-        if(value instanceof Set) {
-            const params = new URLSearchParams(searchParams);
-            params.set('orderBy', value.values().next().value);
-            router.replace(`${pathname}?${params}`);
-        }
-    }
-
-    const handleGenderSelect = (value: string) => {
-        const params = new URLSearchParams(searchParams);
-        if(selectedGender.includes(value)) {
-            params.set('gender', selectedGender.filter(g => g !== value).toString())
-        }else{
-            params.set('gender', [...selectedGender, value].toString())
-        }
-        router.replace(`${pathname}?${params}`);
-
-    }
 
     if (pathname !== '/members') return null;
 
