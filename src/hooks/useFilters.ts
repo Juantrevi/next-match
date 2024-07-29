@@ -31,7 +31,7 @@ export const useFilters = () => {
 
     }, [ageRange, gender, orderBy, router, pathname])
 
-    const genders = [
+    const genderList = [
         {value: 'male', icon: FaMale},
         {value: 'female', icon: FaFemale},
     ]
@@ -50,5 +50,15 @@ export const useFilters = () => {
     const handleGenderSelect = (value: string) => {
         if(gender.includes(value)) setFilters('gender', gender.filter(g => g !== value));
         else setFilters('gender', [...gender, value]);
+    }
+
+    return {
+        orderByList,
+        genderList,
+        selectAge: handleAgeSelect,
+        selectGender: handleGenderSelect,
+        selectOrder: handleOrderSelect,
+        filters,
+        clientLoaded
     }
 }

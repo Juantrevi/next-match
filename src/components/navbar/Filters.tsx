@@ -4,10 +4,12 @@ import React, {useState} from 'react';
 import {FaFemale, FaMale} from "react-icons/fa";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Button, Select, Selection, SelectItem, Slider} from "@nextui-org/react";
+import {useFilters} from "@/hooks/useFilters";
 
 export default function Filters() {
 
-
+    const pathname = usePathname();
+    const {selectOrder, clientLoaded, genderList, orderByList, filters, selectGender, selectAge} = useFilters();
 
     if (pathname !== '/members') return null;
 
@@ -21,13 +23,13 @@ export default function Filters() {
                     <div>
                         Gender:
                     </div>
-                    {genders.map(({icon: Icon, value}) => (
+                    {genderList.map(({icon: Icon, value}) => (
                         <Button
                             key={value}
                             size={'sm'}
                             isIconOnly
-                            color={selectedGender.includes(value) ? 'secondary' : 'default'}
-                            onClick={() => handleGenderSelect(value)}
+                            color={filters.gender.includes(value) ? 'secondary' : 'default'}
+                            onClick={() => selectGender(value)}
                         >
                             <Icon size={24} />
                         </Button>
@@ -41,7 +43,7 @@ export default function Filters() {
                         minValue={18}
                         maxValue={99}
                         defaultValue={[18, 99]}
-                        onChangeEnd={(value) => handleAgeSelect(value as number[])}
+                        onChangeEnd={(value) => selectAge(value as number[])}
                     />
                 </div>
                 <div className={'w-1/4'}>
@@ -52,8 +54,8 @@ export default function Filters() {
                         variant={'bordered'}
                         color={'secondary'}
                         aria-label={'Order by selector'}
-                        selectedKeys={new Set([searchParams.get('orderBy') || 'updated'])}
-                        onSelectionChange={handleOrderSelect}
+                        selectedKeys={new Set([filters.orderBy])}
+                        onSelectionChange={selectOrder}
                     >
                         {orderByList.map(item => (
                             <SelectItem key={item.value} value={item.value}>
