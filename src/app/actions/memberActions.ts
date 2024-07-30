@@ -3,28 +3,35 @@
 import {prisma} from "@/lib/prisma";
 import {auth} from "@/auth";
 import {toast} from "react-toastify";
-import {Photo} from ".prisma/client";
-import {UserFilters} from "@/types";
+import {Member, Photo} from ".prisma/client";
+import {GetMemberParams, PaginatedResponse, UserFilters} from "@/types";
 import {addYears} from "date-fns";
 import {getAuthUserId} from "@/app/actions/authActions";
 
-export async function getMembers(searchParams: UserFilters) {
-  const session = await auth();
-  if(!session?.user) {
-    return null;
-  }
+export async function getMembers({
+    ageRange = '18,100',
+    gender = 'male,female',
+    orderBy = 'updated',
+    pageNumber = '1',
+    pageSize = '12'
+                                 } : GetMemberParams): Promise<PaginatedResponse<Member>> {
+  const userId = await getAuthUserId();
 
-  const ageRange = searchParams?.ageRange?.toString()?.split(',') || [18, 99];
+  const [minAge, maxAge] = ageRange?.split(',')
   const currentDate = new Date();
-  const minDob = addYears(currentDate, -ageRange[1] - 1);
-  const maxDob = addYears(currentDate, -ageRange[0]);
+  const minDob = addYears(currentDate, -maxAge - 1);
+  const maxDob = addYears(currentDate, -minAge);
 
-  const orderBySelector = searchParams?.orderBy || 'updated'
+  const selectedGender = gender?.split(',')
 
-  const selectedGender = searchParams?.gender?.toString()?.split(',') || ['male', 'female'];
+  const page = parseInt(pageNumber);
+  const limit = parseInt(pageSize);
+
+  const skip = (page - 1) * limit;
 
   try {
-    return prisma.member.findMany({
+
+    const count = await prisma.member.count({
       where: {
         AND: [
           {dateOfBirth: {gte: minDob}},
@@ -32,11 +39,32 @@ export async function getMembers(searchParams: UserFilters) {
           {gender: {in: selectedGender}},
         ],
         NOT: {
-          userId: session.user.id
+          userId: userId
         }
       },
-      orderBy: {[orderBySelector]: 'desc'},
+    })
+
+    const members = await prisma.member.findMany({
+      where: {
+        AND: [
+          {dateOfBirth: {gte: minDob}},
+          {dateOfBirth: {lte: maxDob}},
+          {gender: {in: selectedGender}},
+        ],
+        NOT: {
+          userId: userId
+        }
+      },
+      orderBy: {[orderBy]: 'desc'},
+      skip,
+      take: limit,
     });
+
+    return {
+      items: members,
+      totalCount: count
+    }
+
   }catch(error) {
     console.error(error)
     throw error;

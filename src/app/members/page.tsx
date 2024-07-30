@@ -3,12 +3,12 @@ import { getMembers } from "@/app/actions/memberActions";
 import MemberCard from "@/app/members/MemberCard";
 import {fetchCurrentUserLikeIds} from "@/app/actions/likeActions";
 import PaginationComponent from "@/components/PaginationComponent";
-import {UserFilters} from "@/types";
+import {GetMemberParams} from "@/types";
 import EmptyState from "@/components/EmptyState";
 
-export default async function MembersPage({searchParams}: {searchParams: UserFilters}) {
+export default async function MembersPage({searchParams}: {searchParams: GetMemberParams}) {
 
-    const members = await getMembers(searchParams);
+    const {items: members, totalCount} = await getMembers(searchParams);
     const likeIds = await fetchCurrentUserLikeIds();
 
     return (
@@ -23,7 +23,7 @@ export default async function MembersPage({searchParams}: {searchParams: UserFil
                                 <MemberCard member={member} key={member.id} likeIds={likeIds}/>
                             ))}
                         </div>
-                        <PaginationComponent/>
+                        <PaginationComponent totalCount={totalCount}/>
                     </>
                 )}
 

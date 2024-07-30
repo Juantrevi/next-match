@@ -3,6 +3,7 @@ import {useEffect, useState, useTransition} from "react";
 import {FaFemale, FaMale} from "react-icons/fa";
 import {Selection} from "@nextui-org/react";
 import useFilterStore from "@/hooks/useFilterStore";
+import usePaginationStore from "@/hooks/usePaginationStore";
 
 export const useFilters = () => {
     const pathname = usePathname();
@@ -18,6 +19,11 @@ export const useFilters = () => {
 
     const {filters, setFilters} = useFilterStore();
 
+    const {pageNumber, pageSize} = usePaginationStore(state => ({
+        pageNumber: state.pagination.pageNumber,
+        pageSize: state.pagination.pageSize
+    }));
+
     const {gender, ageRange, orderBy} = filters;
 
     useEffect(() => {
@@ -27,11 +33,13 @@ export const useFilters = () => {
             if(gender) searchParams.set('gender', gender.join(','));
             if(ageRange) searchParams.set('ageRange', ageRange.toString());
             if(orderBy) searchParams.set('orderBy', orderBy);
+            if (pageSize) searchParams.set('pageSize', pageSize.toString());
+            if (pageNumber) searchParams.set('pageNumber', pageNumber.toString());
 
             router.replace(`${pathname}?${searchParams}`);
         })
 
-    }, [ageRange, gender, orderBy, router, pathname])
+    }, [ageRange, gender, orderBy, router, pathname, pageNumber, pageSize])
 
     const genderList = [
         {value: 'male', icon: FaMale},
