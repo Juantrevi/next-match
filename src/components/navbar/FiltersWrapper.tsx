@@ -7,6 +7,6 @@ import Filters from "@/components/navbar/Filters";
 export default function FiltersWrapper() {
     const pathname = usePathname();
 
-    if (pathname !== '/members') return <Filters />;
+    if (pathname === '/members') return <Filters />;
     else return null;
 };

@@ -1,17 +1,28 @@
 'use client'
 
-import {Button, Select, SelectItem, Slider} from "@nextui-org/react";
+import {Button, Select, SelectItem, Slider, Spinner} from "@nextui-org/react";
 import {useFilters} from "@/hooks/useFilters";
 
 export default function Filters() {
 
-    const {selectOrder, clientLoaded, genderList, orderByList, filters, selectGender, selectAge} = useFilters();
+    const {selectOrder,
+        clientLoaded,
+        genderList,
+        orderByList,
+        filters,
+        selectGender,
+        selectAge,
+        isPending
+    } = useFilters();
 
     return (
         <div className={'shadow-md py-2'}>
             <div className={'flex flex-row justify-around items-center'}>
-                <div className={'text-secondary font-semibold text-xl'}>
-                    Results: 10
+                <div className={'flex gap-2 items-center'}>
+                    <div className={'text-secondary font-semibold text-xl'}>
+                        Results: 10
+                    </div>
+                    {isPending && <Spinner size={'sm'} color={'secondary'}/>}
                 </div>
                 <div className={'flex gap-2 items-center'}>
                     <div>
