@@ -19,12 +19,19 @@ export const useFilters = () => {
 
     const {filters, setFilters} = useFilterStore();
 
-    const {pageNumber, pageSize} = usePaginationStore(state => ({
+    const {pageNumber, pageSize, setPage} = usePaginationStore(state => ({
         pageNumber: state.pagination.pageNumber,
-        pageSize: state.pagination.pageSize
+        pageSize: state.pagination.pageSize,
+        setPage: state.setPage
     }));
 
     const {gender, ageRange, orderBy} = filters;
+
+    useEffect(() => {
+        if(gender || ageRange || orderBy) {
+            setPage(1);
+        }
+    }, [gender, ageRange, orderBy, setPage])
 
     useEffect(() => {
         startTransition(() => {
