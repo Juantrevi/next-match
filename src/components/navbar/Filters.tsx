@@ -1,17 +1,11 @@
 'use client'
 
-import React, {useState} from 'react';
-import {FaFemale, FaMale} from "react-icons/fa";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {Button, Select, Selection, SelectItem, Slider} from "@nextui-org/react";
+import {Button, Select, SelectItem, Slider} from "@nextui-org/react";
 import {useFilters} from "@/hooks/useFilters";
 
 export default function Filters() {
 
-    const pathname = usePathname();
     const {selectOrder, clientLoaded, genderList, orderByList, filters, selectGender, selectAge} = useFilters();
-
-    if (pathname !== '/members') return null;
 
     return (
         <div className={'shadow-md py-2'}>

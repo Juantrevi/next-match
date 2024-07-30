@@ -6,7 +6,7 @@ import NavLink from "./NavLink";
 import {auth} from "@/auth";
 import UserMenu from "@/components/navbar/UserMenu";
 import {getUserInfoForNav} from "../../app/actions/userAction";
-import Filters from "@/components/navbar/Filters";
+import FiltersWrapper from "@/components/navbar/FiltersWrapper";
 
 export default async function TopNav() {
     const session = await auth();
@@ -50,7 +50,7 @@ export default async function TopNav() {
                 }
             </NavbarContent>
         </Navbar>
-            <Filters />
+            <FiltersWrapper />
         </>
     );
 };
