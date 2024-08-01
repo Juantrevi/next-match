@@ -100,46 +100,54 @@ export async function getMessageThread(recipientId: string){
 
 }
 
-export async function getMessagesByContainer(container?: string | null, cursor?: string, limit = 2){
+// Function to get messages by container (inbox or outbox) with cursor-based pagination
+export async function getMessagesByContainer(container?: string | null, cursor?: string, limit = 10) {
     try {
+        // Get the ID of the currently authenticated user
         const userId = await getAuthUserId();
 
+        // Define conditions based on the container type (inbox or outbox)
         const conditions = {
-            [container === 'outbox' ? 'senderId' : 'recipientId']: userId,
-            ...(container === 'outbox' ? {senderDeleted: false} : {recipientDeleted: false})
-        }
+            [container === 'outbox' ? 'senderId' : 'recipientId']: userId, // Set senderId or recipientId based on container
+            ...(container === 'outbox' ? { senderDeleted: false } : { recipientDeleted: false }) // Exclude deleted messages
+        };
 
+        // Fetch messages from the database with the specified conditions and cursor for pagination
         const messages = await prisma.message.findMany({
             where: {
-                ...conditions,
-                ...(cursor ? {created : {lte: new Date(parseInt(cursor))}} : {})
+                ...conditions, // Apply the conditions
+                ...(cursor ? { created: { lte: new Date(cursor) } } : {}) // Apply cursor if provided
             },
             orderBy: {
-                created: 'desc'
+                created: 'desc' // Order messages by creation date in descending order
             },
-            select: messageSelect,
-            take: limit + 1
-        })
+            select: messageSelect, // Select specific fields to return
+            take: limit + 1 // Fetch one extra message to determine if there are more messages
+        });
 
         let nextCursor: string | undefined;
 
-        if(messages.length > limit) {
-            const nextItem = messages.pop()
-            nextCursor = nextItem?.created.toISOString();
-        }else {
-            nextCursor = undefined;
+        // Check if there are more messages than the limit
+        if (messages.length > limit) {
+            const nextItem = messages.pop(); // Remove the extra message
+            nextCursor = nextItem?.created.toISOString(); // Set the next cursor to the creation date of the extra message
+        } else {
+            nextCursor = undefined; // No more messages, set next cursor to undefined
         }
 
-        const messagesToReturn =  messages.map(message => mapMessageToMessageDto(message))
+        // Map messages to DTOs (Data Transfer Objects)
+        const messagesToReturn = messages.map(message => mapMessageToMessageDto(message));
 
-        return { messages: messagesToReturn, nextCursor }
+        // Return the messages and the next cursor
+        return {
+            messages: messagesToReturn,
+            nextCursor
+        };
 
-
-    }catch (error){
-        console.log(error);
-        throw error;
+    } catch (error) {
+        console.log(error); // Log any errors
+        throw error; // Rethrow the error to be handled by the caller
     }
-
 }
 
 

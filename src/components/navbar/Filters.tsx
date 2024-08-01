@@ -49,6 +49,7 @@ export default function Filters() {
                         maxValue={99}
                         defaultValue={[18, 99]}
                         onChangeEnd={(value) => selectAge(value as number[])}
+                        aria-label={'Age range slider'}
                     />
                 </div>
                 <div className={'w-1/4'}>
