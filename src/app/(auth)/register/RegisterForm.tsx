@@ -19,7 +19,7 @@ import ProfileForm from "@/app/(auth)/register/ProfileForm";
 const stepSchemas = [registerSchema, profileSchema];
 
 export default function RegisterForm() {
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState(1);
     const currentValidationSchema = stepSchemas[activeStep];
 
     const router = useRouter();
