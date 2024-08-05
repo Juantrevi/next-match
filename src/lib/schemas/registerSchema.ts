@@ -28,4 +28,4 @@ export const profileSchema = z.object({
     }),
 })
 
-export type RegisterSchema = z.infer<typeof registerSchema>;
+export type RegisterSchema = z.infer<typeof registerSchema & typeof profileSchema>;
