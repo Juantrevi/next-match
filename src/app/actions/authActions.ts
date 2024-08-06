@@ -1,7 +1,7 @@
 'use server'
 
 // Import necessary modules and schemas
-import {registerSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
+import {combinedRegisterSchema, registerSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
 import bcrypt from 'bcryptjs'; // For hashing passwords
 import {prisma} from "@/lib/prisma"; // Prisma client for database interactions
 import {ActionResult} from "@/types"; // Custom type for action results
@@ -50,13 +50,13 @@ export async function signOutUser() {
 export async function registerUser(data: RegisterSchema): Promise<ActionResult<User>>{
     try {
         // Validate input data against the schema
-        const validated = registerSchema.safeParse(data);
+        const validated = combinedRegisterSchema.safeParse(data);
         if(!validated.success){
             // Return error if validation fails
             return {status: 'error', error: validated.error.errors};
         }
         // Destructure validated data
-        const{name, email, password} = validated.data;
+        const{name, email, password, gender, description, country, dateOfBirth, city} = validated.data;
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         // Check if user already exists
@@ -74,7 +74,17 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
             data: {
                 name,
                 email,
-                passwordHash: hashedPassword
+                passwordHash: hashedPassword,
+                member: {
+                    create: {
+                        name,
+                        description,
+                        city,
+                        country,
+                        dateOfBirth: new Date(dateOfBirth),
+                        gender
+                    }
+                }
             }
         });
         // Return success with created user data

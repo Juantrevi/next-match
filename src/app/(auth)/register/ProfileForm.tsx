@@ -4,6 +4,7 @@ import React from 'react';
 import {useFormContext} from "react-hook-form";
 import {Input, Textarea} from "@nextui-org/input";
 import {Select, SelectItem} from "@nextui-org/react";
+import {format, subYears} from "date-fns";
 
 export default function ProfileForm() {
     const {register, setValue, getValues, formState: {errors}} = useFormContext();
@@ -35,6 +36,7 @@ export default function ProfileForm() {
                 label='Date of birth'
                 type={'date'}
                 variant='bordered'
+                max={format((subYears(new Date(), 18)), 'yyyy-MM-dd')}
                 {...register('dateOfBirth', )}
                 isInvalid={!!errors.dateOfBirth}
                 errorMessage={errors.dateOfBirth?.message as string}
