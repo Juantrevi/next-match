@@ -29,15 +29,15 @@ export default function RegisterForm() {
         mode: 'onTouched'
     });
 
-    const {handleSubmit, setError, formState: {errors, isValid, isSubmitting}} = methods;
+    const {handleSubmit, setError, getValues, formState: {errors, isValid, isSubmitting}} = methods;
 
     const onSubmit = async (data: RegisterSchema) => {
 
-        const result = await registerUser(data);
+        const result = await registerUser(getValues());
 
         if(result.status === 'success'){
             toast.success('User registered successfully');
-            router.push('/login');
+            router.push('/register/success');
             console.log('User registered successfully');
         } else {
             handleFormServerErrors(result, setError);
