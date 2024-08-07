@@ -5,15 +5,29 @@ import {combinedRegisterSchema, registerSchema, RegisterSchema} from "@/lib/sche
 import bcrypt from 'bcryptjs'; // For hashing passwords
 import {prisma} from "@/lib/prisma"; // Prisma client for database interactions
 import {ActionResult} from "@/types"; // Custom type for action results
-import {User} from "@prisma/client"; // Prisma User model
+import {TokenType, User} from "@prisma/client"; // Prisma User model
 import {LoginSchema} from "@/lib/schemas/loginSchema"; // Schema for login validation
 import {auth, signIn, signOut} from "@/auth"; // Authentication functions
 import {AuthError} from "next-auth"; // Error types from next-auth
-import {redirect} from "next/navigation"; // Redirect function from next/navigation
+import {redirect} from "next/navigation";
+import {generateToken} from "@/lib/tokens"; // Redirect function from next/navigation
 
 // Function to sign in a user with email and password
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>>{
     try {
+
+        const existingUser = await getUserByEmail(data.email);
+
+        if(!existingUser || !existingUser.email) return {status: 'error', error: 'Invalid credentials'};
+
+        if(!existingUser.emailVerified) {
+            const token = await generateToken(data.email, TokenType.VERIFICATION);
+
+            //Send user email
+
+            return {status: 'error', error: 'Please verify your email before logging in'};
+        }
+
         // Attempt to sign in with provided credentials
         const result = await signIn('credentials', {
             email: data.email,
@@ -88,6 +102,9 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
                 }
             }
         });
+
+        const verificationToken = await generateToken(email, TokenType.VERIFICATION);
+
         // Return success with created user data
         return {status: 'success', data: user};
     } catch (error) {
