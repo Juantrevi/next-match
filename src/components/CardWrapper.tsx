@@ -26,7 +26,7 @@ export default function CardWrapper({body, footer, headerIcon: Icon, headerText,
                             <h1 className='text-3xl font-semibold'>{headerText}</h1>
                         </div>
                         {subHeaderText &&
-                        <p className='text-neutral-500'>Welcome to NextMatch</p>}
+                        <p className='text-neutral-500'>{subHeaderText}</p>}
                     </div>
                 </CardHeader>
                 {body &&
