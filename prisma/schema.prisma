@@ -45,6 +45,7 @@ model User {
   emailVerified DateTime?
   passwordHash  String
   image         String?
+  profileComplete Boolean @default(false)
   accounts      Account[]
   member        Member?
   createdAt     DateTime @default(now())
@@ -119,4 +120,19 @@ model Message{
   dateRead DateTime?
   senderDeleted Boolean @default(false)
   recipientDeleted Boolean @default(false)
+}
+
+model Token {
+  id    String  @id @default(cuid())
+  email String
+  token String
+  expires DateTime
+  type TokenType
+
+  @@unique([email, token])
+}
+
+enum TokenType {
+  VERIFICATION
+  PASSWORD_RESET
 }

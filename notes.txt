@@ -29,7 +29,11 @@ HTML but with the power of JavaScript.
   We need two packages, for the server side and client side (npm install pusher pusher-js) [For presence channel too]
 - Zustand: A library that helps to create global state in React. (npm install zustand)
 - Resend: To send email verification. (npm install resend)
-
+- (To restart db)
+     -  npx prisma migrate reset --skip-seed
+     -  npx prisma generate
+     -  npx prisma db push
+     -  npx prisma db seed
 
 It is essential to add the NextUIProvider at the root of your application (Check components folder, Providers.txs and then layout.tsx)
 
