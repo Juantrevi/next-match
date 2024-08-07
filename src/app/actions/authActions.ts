@@ -10,7 +10,7 @@ import {LoginSchema} from "@/lib/schemas/loginSchema"; // Schema for login valid
 import {auth, signIn, signOut} from "@/auth"; // Authentication functions
 import {AuthError} from "next-auth"; // Error types from next-auth
 import {generateToken, getTokenByToken} from "@/lib/tokens";
-import {sendVerificationEmail} from "@/lib/mail"; // Redirect function from next/navigation
+import {sendPasswordResetEmail, sendVerificationEmail} from "@/lib/mail"; // Redirect function from next/navigation
 
 // Function to sign in a user with email and password
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>>{
@@ -177,5 +177,27 @@ export async function verifyEmail(token: string): Promise<ActionResult<string>>{
     }catch (error) {
         console.log(error);
         throw error;
+    }
+}
+
+export async function generateResetPasswordEmail(email: string): Promise<ActionResult<string>> {
+
+    try {
+        const existingUser = await getUserByEmail(email);
+
+        if(!existingUser) {
+            //Change the message so we dont reveal if the email exists
+            return {status: 'error', error: 'Email not found'};
+        }
+
+        const token = await generateToken(email, TokenType.PASSWORD_RESET);
+
+        await sendPasswordResetEmail(token.email, token.token);
+
+        return {status: 'success', data: 'Password reset email sent'};
+
+    }catch (error) {
+        console.log(error);
+        return {status: 'error', error: 'Something went wrong'};
     }
 }

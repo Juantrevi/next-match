@@ -11,11 +11,11 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {signInUser} from "@/app/actions/authActions";
 import {useRouter} from "next/navigation";
 import {toast} from "react-toastify";
+import Link from "next/link";
 
 
 // Define the LoginForm component
 export default function LoginForm() {
-    // Use the useRouter hook from Next.js to access the router object
     const router = useRouter();
 
     // Use the useForm hook from react-hook-form to manage your form state
@@ -88,6 +88,9 @@ export default function LoginForm() {
                             type={'submit'}>
                             Login
                         </Button>
+                        <div className={'flex justify-center hover:underline text-sm'}>
+                            <Link href={'/forgot-password'}> Forgot password? </Link>
+                        </div>
                     </div>
                 </form>
             </CardBody>
