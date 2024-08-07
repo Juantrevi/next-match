@@ -9,8 +9,8 @@ import {TokenType, User} from "@prisma/client"; // Prisma User model
 import {LoginSchema} from "@/lib/schemas/loginSchema"; // Schema for login validation
 import {auth, signIn, signOut} from "@/auth"; // Authentication functions
 import {AuthError} from "next-auth"; // Error types from next-auth
-import {redirect} from "next/navigation";
-import {generateToken} from "@/lib/tokens"; // Redirect function from next/navigation
+import {generateToken} from "@/lib/tokens";
+import {sendVerificationEmail} from "@/lib/mail"; // Redirect function from next/navigation
 
 // Function to sign in a user with email and password
 export async function signInUser(data: LoginSchema): Promise<ActionResult<string>>{
@@ -23,7 +23,7 @@ export async function signInUser(data: LoginSchema): Promise<ActionResult<string
         if(!existingUser.emailVerified) {
             const token = await generateToken(data.email, TokenType.VERIFICATION);
 
-            //Send user email
+            await sendVerificationEmail(token.email, token.token);
 
             return {status: 'error', error: 'Please verify your email before logging in'};
         }
@@ -104,6 +104,8 @@ export async function registerUser(data: RegisterSchema): Promise<ActionResult<U
         });
 
         const verificationToken = await generateToken(email, TokenType.VERIFICATION);
+
+        await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
         // Return success with created user data
         return {status: 'success', data: user};
