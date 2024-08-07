@@ -11,10 +11,11 @@ type Props = {
     subHeaderText?: string;
     action?: () => void;
     actionLabel?: string;
+    footer?: ReactNode;
 
 }
 
-export default function CardWrapper({body, headerIcon: Icon, headerText, subHeaderText, action, actionLabel}: Props) {
+export default function CardWrapper({body, footer, headerIcon: Icon, headerText, subHeaderText, action, actionLabel}: Props) {
     return (
         <div className={'flex items-center justify-center vertical-center'}>
             <Card className='w-2/5 mx-auto p-5'>
@@ -37,6 +38,9 @@ export default function CardWrapper({body, headerIcon: Icon, headerText, subHead
                         <Button onClick={action} fullWidth color={'secondary'} variant={'bordered'}>
                             {actionLabel}
                         </Button>
+                    )}
+                    {footer && (
+                        <>{footer}</>
                     )}
                 </CardFooter>
             </Card>

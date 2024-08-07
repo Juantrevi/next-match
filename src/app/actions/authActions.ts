@@ -9,7 +9,7 @@ import {TokenType, User} from "@prisma/client"; // Prisma User model
 import {LoginSchema} from "@/lib/schemas/loginSchema"; // Schema for login validation
 import {auth, signIn, signOut} from "@/auth"; // Authentication functions
 import {AuthError} from "next-auth"; // Error types from next-auth
-import {generateToken} from "@/lib/tokens";
+import {generateToken, getTokenByToken} from "@/lib/tokens";
 import {sendVerificationEmail} from "@/lib/mail"; // Redirect function from next/navigation
 
 // Function to sign in a user with email and password
@@ -145,4 +145,37 @@ export async function getAuthUserId(){
     if(!userId) throw new Error('Unauthorized');
     // Return user ID
     return userId;
+}
+
+export async function verifyEmail(token: string): Promise<ActionResult<string>>{
+    try {
+        const existingToken = await getTokenByToken(token) as any;
+
+        if(!existingToken) {
+            return {status: 'error', error: 'Invalid token'};
+        }
+
+        const hasExpired = new Date() > existingToken.expires;
+
+        if(hasExpired) {
+            return {status: 'error', error: 'Token has expired'};
+        }
+
+        const existingUser = await getUserByEmail(existingToken.email)
+
+        await prisma.user.update({
+            where: {id: existingUser?.id},
+            data: {emailVerified: new Date()}
+        })
+
+        await prisma.token.delete({
+            where: {id: existingToken.id}
+        })
+
+        return {status: 'success', data: 'Email verified'};
+
+    }catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
