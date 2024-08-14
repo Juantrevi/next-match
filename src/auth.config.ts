@@ -25,7 +25,7 @@ export default {
 
                 const user = await getUserByEmail(email);
 
-                if(!user || !await compare(password, user.passwordHash)){
+                if(!user || !user.passwordHash || !await compare(password, user.passwordHash)){
                     return null;
                 }
 
