@@ -24,7 +24,7 @@ export default async function RootLayout({
       <body>
       <Providers userId={userId} profileComplete={profileComplete}>
         <TopNav />
-        <main className='container mx-auto ms-10'>
+        <main className='container mx-auto ms-10' >
           {children}
         </main>
       </Providers>
