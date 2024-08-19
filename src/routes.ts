@@ -10,5 +10,6 @@ export const authRoutes = [
     '/verify-email',
     '/forgot-password',
     '/reset-password',
+
 ]
 

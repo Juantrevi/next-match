@@ -16,6 +16,8 @@ export default auth((req) => {
     // Check if the current route is an auth route
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    const isProfileComplete = req.auth?.user.profileComplete;
+
     // If the current route is a public route, continue to the next middleware or route handler
     if (isPublic) {
         return NextResponse.next();
@@ -33,6 +35,10 @@ export default auth((req) => {
     // If the current route is not a public route and the user is not logged in, redirect to the '/login' page
     if(!isPublic && !isLoggedIn){
         return NextResponse.redirect(new URL('/login', nextUrl));
+    }
+
+    if(isLoggedIn && !isProfileComplete && nextUrl.pathname !== '/complete-profile'){
+        return NextResponse.redirect(new URL('/complete-profile', nextUrl));
     }
 
     // If none of the above conditions are met, continue to the next middleware or route handler
