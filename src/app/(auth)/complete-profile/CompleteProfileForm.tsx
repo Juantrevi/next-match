@@ -8,6 +8,8 @@ import CardWrapper from "@/components/CardWrapper";
 import {RiProfileLine} from "react-icons/ri";
 import {Button} from "@nextui-org/react";
 import ProfileForm from "@/app/(auth)/register/ProfileForm";
+import {completeSocialLoginProfile} from "@/app/actions/authActions";
+import {signIn} from "next-auth/react";
 
 
 
@@ -19,7 +21,14 @@ export default function CompleteProfileForm() {
 
     const {handleSubmit, formState: {errors, isSubmitting, isValid}} = methods
 
-    const onsSubmit = (data: ProfileSchema) => {
+    const onsSubmit = async (data: ProfileSchema) => {
+        const result = await completeSocialLoginProfile(data)
+
+        if (result.status === 'success') {
+            signIn(result.data, {
+                callbackUrl: '/members'
+            })
+        }
 
     };
 
