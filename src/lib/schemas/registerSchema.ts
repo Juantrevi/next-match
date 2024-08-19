@@ -30,4 +30,6 @@ export const profileSchema = z.object({
 
 export const combinedRegisterSchema = registerSchema.and(profileSchema);
 
+export type ProfileSchema = z.infer<typeof profileSchema>
+
 export type RegisterSchema = z.infer<typeof registerSchema & typeof profileSchema>;
