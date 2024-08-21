@@ -50,6 +50,7 @@ model User {
   member        Member?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  role          Role     @default(MEMBER)
 }
 
 // The Member model has a one-to-many relationship with the Photo model.
@@ -135,4 +136,9 @@ model Token {
 enum TokenType {
   VERIFICATION
   PASSWORD_RESET
+}
+
+enum Role {
+  MEMBER
+  ADMIN
 }
