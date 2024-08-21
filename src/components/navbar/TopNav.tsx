@@ -22,6 +22,8 @@ export default async function TopNav() {
         { href: '/admin/moderation', label: 'Photo Moderation' }
     ]
 
+    const links = session?.user.role === 'ADMIN' ? adminLinks : memberLinks;
+
     return (
         <>
         <Navbar
@@ -46,10 +48,10 @@ export default async function TopNav() {
             <NavbarContent justify='center'>
                 {userInfo && (
                     <>
-                        <NavLink href='/members' label='Matches' />
-                        <NavLink href='/lists' label='Lists' />
-                        <NavLink href='/messages' label='Messages' />
-                    </>
+                        {links.map(item => (
+                            <NavLink key={item.href} href={item.href} label={item.label} />
+                        ))}
+                        </>
                 )}
             </NavbarContent>
             <NavbarContent justify='end'>
