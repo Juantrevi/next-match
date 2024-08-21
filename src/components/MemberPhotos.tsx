@@ -8,6 +8,7 @@ import DeleteButton from "@/components/DeleteButton";
 import {Photo} from ".prisma/client";
 import {useRouter} from "next/navigation";
 import {deleteImage, setMainImage} from "@/app/actions/userAction";
+import {toast} from "react-toastify";
 
 type Props = {
     photos: Photo[] | null;
@@ -27,9 +28,17 @@ export default function MemberPhotos({photos, editing, mainImageUrl}: Props) {
     const onSetMain = async (photo: Photo) => {
         if (photo.url === mainImageUrl) return null;
         setLoading({isLoading: true, type: 'main', id: photo.id});
-        await setMainImage(photo);
-        router.refresh();
-        setLoading({isLoading: false, type: '', id: ''});
+
+        try{
+            await setMainImage(photo);
+            router.refresh();
+        }catch (error: any){
+            toast.error(error.message);
+        }finally {
+            setLoading({isLoading: false, type: '', id: ''});
+
+        }
+
     }
 
     const onDelete = async (photo: Photo) => {

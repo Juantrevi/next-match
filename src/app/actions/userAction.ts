@@ -77,6 +77,7 @@ export async function addImage(url: string, publicId: string){
 }
 
 export async function setMainImage(photo: Photo){
+    if(!photo.isApproved) throw new Error('You cannot set a photo that is not approved as your main photo');
     try{
         const userId = await getAuthUserId();
 
