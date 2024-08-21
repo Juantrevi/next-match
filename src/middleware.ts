@@ -18,8 +18,12 @@ export default auth((req) => {
 
     const isProfileComplete = req.auth?.user.profileComplete;
 
+    const isAdmin = req.auth?.user.role === 'ADMIN';
+
+    const isAdminRoute = nextUrl.pathname.startsWith('/admin');
+
     // If the current route is a public route, continue to the next middleware or route handler
-    if (isPublic) {
+    if (isPublic || isAdmin) {
         return NextResponse.next();
     }
 
@@ -37,6 +41,10 @@ export default auth((req) => {
         return NextResponse.redirect(new URL('/login', nextUrl));
     }
 
+    if (isAdminRoute && !isAdmin){
+        return NextResponse.redirect(new URL('/', nextUrl));
+    }
+
     if(isLoggedIn && !isProfileComplete && nextUrl.pathname !== '/complete-profile'){
         return NextResponse.redirect(new URL('/complete-profile', nextUrl));
     }
@@ -47,5 +55,5 @@ export default auth((req) => {
 
 // Export a config object that specifies the routes that this middleware should be applied to
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+    matcher: ['/((?!api|_next/static|_next/image|images|favicon.ico).*)']
 }
