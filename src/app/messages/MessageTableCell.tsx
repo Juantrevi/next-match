@@ -19,10 +19,15 @@ export default function MessageTableCell({item, columnKey, isOutbox, deleteMessa
     const cellValue = item[columnKey as keyof MessageDto];
     const {isOpen, onOpen, onClose} = useDisclosure();
 
+    const onConfirmDeleteMessage = () => {
+        deleteMessage(item);
+    }
+
     const footerButtons: ButtonProps[] = [
-        {color: 'default', onClick: onClose, children: 'Close'},
-        {color: 'secondary', onClick: onClose, children: 'Submit'}
+        {color: 'default', onClick: onClose, children: 'Cancel'},
+        {color: 'secondary', onClick: onConfirmDeleteMessage, children: 'Confirm'}
     ]
+
 
     switch (columnKey){
         case 'recipientName':
@@ -58,8 +63,8 @@ export default function MessageTableCell({item, columnKey, isOutbox, deleteMessa
                     <AppModal
                         isOpen={isOpen}
                         onClose={onClose}
-                        header={'Test Modal'}
-                        body={<div>Just testing</div>}
+                        header={'Please confirm this action'}
+                        body={<div>Are you sure you want to delete this message? THIS CANNOT BE UNDONE</div>}
                         footerButtons={footerButtons}/>
                 </>
 
