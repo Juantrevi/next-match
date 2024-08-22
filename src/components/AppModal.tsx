@@ -5,18 +5,29 @@ import {Button, ButtonProps} from "@nextui-org/react";
 type Props = {
     isOpen: boolean;
     onClose: () => void;
-    header: string;
+    header?: string;
     body: ReactNode;
-    footerButtons: ButtonProps[]
+    footerButtons?: ButtonProps[]
+    imageModal?: boolean;
 
 }
 
-export default function AppModal({isOpen, onClose, header, body, footerButtons}: Props) {
+export default function AppModal({isOpen, onClose, header, body, footerButtons, imageModal}: Props) {
+
+    const handleClose = () => {
+        setTimeout(() =>
+            onClose(), 10)
+        }
+
     return (
         <Modal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={handleClose}
             placement={'top-center'}
+            classNames={{
+                base: `${imageModal ? 'border-2 border-white' : ''}`,
+                body: `${imageModal ? 'p-0' : ''}`,
+            }}
             motionProps={{
                 variants: {
                     enter: {y: 0, opacity:100, transition: {duration: 0.3}},
@@ -26,16 +37,18 @@ export default function AppModal({isOpen, onClose, header, body, footerButtons}:
         >
 
             <ModalContent>
-                <ModalHeader className={'flex flex-col gap-1'}>
+                {!imageModal &&
+                <ModalHeader className={'flex flex-col gap-1'}>{header}</ModalHeader>}
                     <ModalBody>{body}</ModalBody>
+                {!imageModal &&
                     <ModalFooter>
-                        {footerButtons.map((props: ButtonProps, index) => (
+                        {footerButtons && footerButtons.map((props: ButtonProps, index) => (
                             <Button {...props} key={index}>
                                 {props.children}
                             </Button>
                         ))}
-                    </ModalFooter>
-                </ModalHeader>
+                    </ModalFooter>}
+
             </ModalContent>
 
         </Modal>
