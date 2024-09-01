@@ -1,17 +1,16 @@
+// This component renders an error message inside a styled card when an error occurs.
+// It provides a button to reset the error state and try again.
+
 'use client'
 
 import {Card, CardBody, CardHeader} from "@nextui-org/card";
 import {BiSolidError} from "react-icons/bi";
 import {Button, CardFooter} from "@nextui-org/react";
 
-export default function Error({
-                                  error,
-                                  reset,
-                              }: {
+export default function Error({error, reset}: {
     error: Error & { digest?: string }
     reset: () => void
 }) {
-
 
     return (
         <div className={'flex items-center justify-center vertical-center'}>
@@ -33,7 +32,6 @@ export default function Error({
                     </Button>
                 </CardFooter>
             </Card>
-
         </div>
     )
 }
