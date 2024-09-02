@@ -9,7 +9,7 @@ export default function RegisterSuccessPage() {
     const router = useRouter();
     return (
         <CardWrapper
-            headerText={'You have successfully registered'}
+            headerText={'Please verify your email address'}
             subHeaderText={'You can now login to the app'}
             action={() => router.push('/login')}
             actionLabel={'Go to login'}
