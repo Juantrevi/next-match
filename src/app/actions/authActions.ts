@@ -5,7 +5,7 @@
 'use server'
 
 // Import necessary modules and schemas
-import {combinedRegisterSchema, ProfileSchema, registerSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
+import {combinedRegisterSchema, ProfileSchema, RegisterSchema} from "@/lib/schemas/registerSchema";
 import bcrypt from 'bcryptjs'; // For hashing passwords
 import {prisma} from "@/lib/prisma"; // Prisma client for database interactions
 import {ActionResult} from "@/types"; // Custom type for action results
