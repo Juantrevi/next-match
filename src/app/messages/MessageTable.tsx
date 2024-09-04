@@ -1,3 +1,7 @@
+// This component renders a table displaying messages.
+// It fetches the initial messages and handles loading more messages when the user clicks the "Load more" button.
+// It also allows selecting a message and deleting messages.
+
 'use client'
 
 import React from 'react';
