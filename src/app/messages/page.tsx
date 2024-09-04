@@ -4,7 +4,7 @@
 
 import React from 'react';
 import MessageSidebar from "@/app/messages/MessageSidebar";
-import {getMessagesByContainer, getMessageThread} from "@/app/actions/messageActions";
+import {getMessagesByContainer} from "@/app/actions/messageActions";
 import MessageTable from "@/app/messages/MessageTable";
 
 export default async function MessagesPage({searchParams}:{searchParams: {container: string}}) {
